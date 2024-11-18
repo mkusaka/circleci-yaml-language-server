@@ -2,6 +2,7 @@ package parser
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/circleci/circleci-yaml-language-server/pkg/ast"
 	"github.com/circleci/circleci-yaml-language-server/pkg/utils"
@@ -37,6 +38,10 @@ func parseDockerImageValue(value string) ast.DockerImageInfo {
 	if tag != "" {
 		// The regex includes the leading ":", just snip it
 		tag = tag[1:]
+		// Split at "@" and take only the version part before it
+		if strings.Contains(tag, "@") {
+			tag = strings.Split(tag, "@")[0]
+		}
 	}
 
 	// if the tag is a parameter, just consider that it's the "latest" tag for validation purposes
